@@ -18,8 +18,10 @@ logging.basicConfig(
 class ConfigManager:
     """配置管理器：环境变量 > 配置文件 > 默认值"""
     def __init__(self):
+        # 动态获取配置文件路径（支持通过环境变量覆盖）
+        config_file = os.getenv("CONFIG_FILE", "conf.env")
         self.config = configparser.ConfigParser()
-        self.config.read('conf.env', encoding='utf-8')
+        self.config.read(config_file, encoding='utf-8')
 
     def get(self, key, default=None, required=False):
         """获取配置项：环境变量 > 配置文件 > 默认值"""
