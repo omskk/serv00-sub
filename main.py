@@ -79,9 +79,14 @@ def merge_files_from_urls(url_list):
             logging.warning(f"WARNING: 无法读取文件 {url}，跳过")
     return merged_content
 
-class MyHTTPHandler(BaseHTTPRequestHandler):
+class handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path == '/sub':
+        if self.path == '/':
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html')
+            self.end_headers()
+            self.wfile.write(b"Hello, World!")
+        elif self.path == '/sub':
             self.handle_sub()
         elif self.path == '/up':
             self.handle_up()
@@ -153,6 +158,6 @@ class MyHTTPHandler(BaseHTTPRequestHandler):
 
 if __name__ == '__main__':
     server_address = ('0.0.0.0', 8080)
-    httpd = HTTPServer(server_address, MyHTTPHandler)
+    httpd = HTTPServer(server_address, handler)
     logging.info(f"服务器运行在 http://0.0.0.0:{server_address[1]}")
     httpd.serve_forever()
